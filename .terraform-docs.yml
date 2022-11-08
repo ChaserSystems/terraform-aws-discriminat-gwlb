@@ -1,0 +1,15 @@
+formatter: markdown table
+output:
+  mode: inject
+  file: README.md
+sort:
+  enabled: false
+sections:
+  hide:
+    - modules
+    - providers
+content: |-
+  {{ .Requirements }}
+  {{ .Inputs }}
+  {{ .Outputs }}
+  {{ .Resources }}
