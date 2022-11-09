@@ -194,9 +194,10 @@ resource "aws_lb_target_group" "discriminat" {
 
   deregistration_delay = var.connection_draining_time
 
-  # TODO
-  # terraform provider implementation pending: https://github.com/hashicorp/terraform-provider-aws/issues/27153
-  # target_failover {}
+  target_failover {
+    on_deregistration = "no_rebalance"
+    on_unhealthy      = "no_rebalance"
+  }
 
   health_check {
     healthy_threshold   = 2
