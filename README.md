@@ -85,7 +85,7 @@ In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traff
 
 ### Intra-Zone
 
-In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DisrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ.
+In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DiscrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ. Please note this does not fully protect you against the failure of an entire AZ on the Amazon side, however your other services in the zone would potentially be impacted too and therefore not sending egress traffic.
 
 > **Note**\
 > Terraform variable `high_availability_mode` should be set to `intra-zone`.
@@ -398,7 +398,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | > 1.2, < 2 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | > 4, < 5 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.38, < 5 |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -407,7 +407,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The IDs of the Private Subnets where the workload, of which the egress is to be filtered, resides. A Gateway Load Balancer (GWLB) will be deployed in these, and a map of Private Subnets' Route Table IDs to VPC Endpoint IDs (GWLB) will be emitted in the `target_gwlb_endpoints` output field. | `list(string)` | n/a | yes |
 | <a name="input_connection_draining_time"></a> [connection\_draining\_time](#input\_connection\_draining\_time) | In seconds, the amount of time to allow for existing flows to end naturally. During an instance-refresh or a scale-in activity, a DiscrimiNAT Firewall instance will not be terminated for at least this long to prevent abrupt interruption of existing flows. | `number` | `150` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Map of key-value tag pairs to apply to resources created by this module. See examples for use. | `map(any)` | `{}` | no |
-| <a name="input_high_availability_mode"></a> [high\_availability\_mode](#input\_high\_availability\_mode) | `cross-zone` or `intra-zone`. In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traffic evenly across all deployed AZs. This reduces the number of DiscrimiNAT Firewall instances you will have to run for high-availability but increases data-transfer costs. In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DisrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ. | `string` | `"cross-zone"` | no |
+| <a name="input_high_availability_mode"></a> [high\_availability\_mode](#input\_high\_availability\_mode) | `cross-zone` or `intra-zone`. In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traffic evenly across all deployed AZs. This reduces the number of DiscrimiNAT Firewall instances you will have to run for high-availability but increases data-transfer costs. In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DiscrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ. | `string` | `"cross-zone"` | no |
 | <a name="input_per_region_min_instances"></a> [per\_region\_min\_instances](#input\_per\_region\_min\_instances) | In case of `high_availability_mode` set to `cross-zone`, this is the minimum number of instances across all AZs. This variable is IGNORED in case of `high_availability_mode` set to `intra-zone`. | `number` | `2` | no |
 | <a name="input_per_region_max_instances"></a> [per\_region\_max\_instances](#input\_per\_region\_max\_instances) | In case of `high_availability_mode` set to `cross-zone`, this is the maximum number of instances across all AZs following a scale-out or an instances-refresh event. This variable is IGNORED in case of `high_availability_mode` set to `intra-zone`. | `number` | `3` | no |
 | <a name="input_per_az_min_instances"></a> [per\_az\_min\_instances](#input\_per\_az\_min\_instances) | In case of `high_availability_mode` set to `intra-zone`, this is the minimum number of instances per AZ. This variable is IGNORED in case of `high_availability_mode` set to `cross-zone`. | `number` | `2` | no |

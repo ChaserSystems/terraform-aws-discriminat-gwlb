@@ -27,7 +27,7 @@ variable "tags" {
 
 variable "high_availability_mode" {
   type        = string
-  description = "`cross-zone` or `intra-zone`. In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traffic evenly across all deployed AZs. This reduces the number of DiscrimiNAT Firewall instances you will have to run for high-availability but increases data-transfer costs. In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DisrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ."
+  description = "`cross-zone` or `intra-zone`. In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traffic evenly across all deployed AZs. This reduces the number of DiscrimiNAT Firewall instances you will have to run for high-availability but increases data-transfer costs. In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DiscrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ."
   default     = "cross-zone"
 
   validation {
