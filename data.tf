@@ -30,7 +30,7 @@ data "aws_ami" "discriminat" {
 
   filter {
     name   = "name"
-    values = ["DiscrimiNAT-2.5.*"]
+    values = var.ami_name == null ? ["DiscrimiNAT-2.5.*"] : [var.ami_name]
   }
 }
 
