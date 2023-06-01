@@ -66,6 +66,7 @@ resource "aws_launch_template" "discriminat" {
     ebs {
       encrypted   = true
       volume_size = tolist(data.aws_ami.discriminat.block_device_mappings)[0].ebs.volume_size
+      volume_type = "gp3"
     }
   }
 
