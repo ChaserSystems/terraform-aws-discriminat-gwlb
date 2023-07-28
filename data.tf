@@ -24,13 +24,13 @@ data "aws_ami" "discriminat" {
   }
 
   filter {
-    name   = var.ami_owner == null ? "product-code" : "name"
-    values = [var.ami_owner == null ? "a83las5cq95zkg3x8i17x6wyy" : var.ami_name]
+    name   = var.ami_owner == null ? "product-code" : "owner-id"
+    values = [var.ami_owner == null ? "a83las5cq95zkg3x8i17x6wyy" : var.ami_owner]
   }
 
   filter {
     name   = "name"
-    values = var.ami_name == null ? ["DiscrimiNAT-2.5.*"] : [var.ami_name]
+    values = var.ami_name == null ? ["DiscrimiNAT-2.6.*"] : [var.ami_name]
   }
 }
 
