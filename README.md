@@ -159,7 +159,7 @@ resource "aws_eip" "nat" {
 # Deploying a new VPC in two AZs with Public and Private Subnets.
 module "aws_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "> 3, < 4"
+  version = "> 3, < 6"
 
   name = "discriminat-example"
 
@@ -182,7 +182,7 @@ module "aws_vpc" {
 # Deploying an EC2 VPC Endpoint.
 module "aws_vpc_endpoints" {
   source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "> 3, < 4"
+  version = "> 3, < 6"
 
   vpc_id = module.aws_vpc.vpc_id
 
@@ -421,7 +421,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 
 | Name | Description |
 |------|-------------|
-| <a name="output_target_gwlb_endpoints"></a> [target\_gwlb\_endpoints](#output\_target\_gwlb\_endpoints) | Map of Route Table IDs to VPC Endpoint IDs (Gateway Load Balancer) for setting as targets to 0.0.0.0/0 in routing tables of the Private Subnets. A Terraform example of using these in an `aws_route` resource can be found at https://github.com/ChaserSystems/terraform-aws-discriminat-eni/blob/main/examples/aws_vpc/example.tf |
+| <a name="output_target_gwlb_endpoints"></a> [target\_gwlb\_endpoints](#output\_target\_gwlb\_endpoints) | Map of Route Table IDs to VPC Endpoint IDs (Gateway Load Balancer) for setting as targets to 0.0.0.0/0 in routing tables of the Private Subnets. A Terraform example of using these in an `aws_route` resource can be found at https://github.com/ChaserSystems/terraform-aws-discriminat-gwlb#deployment-examples, under 'Entirely new VPC with DiscrimiNAT filtering for Private Subnets' |
 ## Resources
 
 | Name | Type |
