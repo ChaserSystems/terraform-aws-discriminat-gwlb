@@ -168,7 +168,7 @@ module "aws_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  azs             = ["eu-west-2a", "eu-west-2b"]
+  azs             = ["eu-west-3a", "eu-west-3b"]
   public_subnets  = ["172.16.11.0/24", "172.16.21.0/24"]
   private_subnets = ["172.16.12.0/24", "172.16.22.0/24"]
 
@@ -398,7 +398,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | > 1.2, < 2 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.38, < 5 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.38, < 6 |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -421,6 +421,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cloudwatch_log_group_name"></a> [cloudwatch\_log\_group\_name](#output\_cloudwatch\_log\_group\_name) | Name of the CloudWatch Log Group where DiscrimiNAT instances will log traffic flow and configuration changes. Useful for automating any logging routing configuration. |
 | <a name="output_target_gwlb_endpoints"></a> [target\_gwlb\_endpoints](#output\_target\_gwlb\_endpoints) | Map of Route Table IDs to VPC Endpoint IDs (Gateway Load Balancer) for setting as targets to 0.0.0.0/0 in routing tables of the Private Subnets. A Terraform example of using these in an `aws_route` resource can be found at https://github.com/ChaserSystems/terraform-aws-discriminat-gwlb#deployment-examples, under 'Entirely new VPC with DiscrimiNAT filtering for Private Subnets' |
 ## Resources
 
