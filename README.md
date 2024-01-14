@@ -33,6 +33,7 @@ Architecture with [Gateway Load Balancer (GWLB)](https://aws.amazon.com/elasticl
 [Security Group Examples](#security-group-examples)<br>
 [Allowlist Building Examples](#allowlist-building-examples)<br>
 [More Help](#more-help)<br>
+[Automated System Health Reporting](#automated-system-health-reporting)<br>
 [Terraform Requirements](#requirements)<br>
 [Terraform Inputs](#inputs)<br>
 [Terraform Outputs](#outputs)<br>
@@ -392,6 +393,30 @@ See our website for full documentation on [building an allowlist from scratch](h
 
 ---
 
+## Automated System Health Reporting
+
+10 minutes after boot and then at 0200 UTC every day, each instance of DiscrimiNAT will collect its OS internals & system logs since instance creation, config changes & traffic flow information from last two hours and upload it to a Chaser-owned cloud bucket. This information is encrypted at rest with a certain public key so only relevant individuals with access to the corresponding private key can decrypt it. The transfer is encrypted over TLS.
+
+Access to this information is immensely useful to create a faster and more reliable DiscrimiNAT as we add new features. We also aim to learn about how users are interacting with the product in order to further improve the usability of it as they embark on a very ambitious journey of fully accounted for and effective egress controls.
+
+We understand if certain environments within your deployment would rather not have this turned on. **To disable it,** a file at the path `/etc/chaser/disable_automated-system-health-reporting` should exist. From our Terraform module v2.7.0 onwards, this can be accomplished by including the following statement:
+
+```
+user_data_base64 = "I2Nsb3VkLWNvbmZpZwp3cml0ZV9maWxlczoKLSBwYXRoOiAvZXRjL2NoYXNlci9kaXNhYmxlX2F1dG9tYXRlZC1zeXN0ZW0taGVhbHRoLXJlcG9ydGluZwo="
+```
+
+The _base64_ value above decodes to:
+
+```
+#cloud-config
+write_files:
+- path: /etc/chaser/disable_automated-system-health-reporting
+```
+
+Which is a [cloud-init](https://cloudinit.readthedocs.io/en/latest/reference/examples.html) way of creating that file in the instance.
+
+--
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -412,9 +437,9 @@ See our website for full documentation on [building an allowlist from scratch](h
 | <a name="input_per_region_max_instances"></a> [per\_region\_max\_instances](#input\_per\_region\_max\_instances) | In case of `high_availability_mode` set to `cross-zone`, this is the maximum number of instances across all AZs following a scale-out or an instances-refresh event. This variable is IGNORED in case of `high_availability_mode` set to `intra-zone`. | `number` | `3` | no |
 | <a name="input_per_az_min_instances"></a> [per\_az\_min\_instances](#input\_per\_az\_min\_instances) | In case of `high_availability_mode` set to `intra-zone`, this is the minimum number of instances per AZ. This variable is IGNORED in case of `high_availability_mode` set to `cross-zone`. | `number` | `2` | no |
 | <a name="input_per_az_max_instances"></a> [per\_az\_max\_instances](#input\_per\_az\_max\_instances) | In case of `high_availability_mode` set to `intra-zone`, this is the maximum number of instances per AZ following a scale-out or an instances-refresh event. This variable is IGNORED in case of `high_availability_mode` set to `cross-zone`. | `number` | `3` | no |
-| <a name="input_instance_size"></a> [instance\_size](#input\_instance\_size) | The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet and for accounts with a large number of VMs, you may want to choose a machine type with more CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6i.2xlarge` , `c6a.large` , `c6a.xlarge` , `c6a.2xlarge` , `c5.large` , `c5.xlarge` , `c5.2xlarge` . | `string` | `"t3.small"` | no |
+| <a name="input_instance_size"></a> [instance\_size](#input\_instance\_size) | The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet and for accounts with a large number of VMs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` . | `string` | `"t3.small"` | no |
 | <a name="input_key_pair_name"></a> [key\_pair\_name](#input\_key\_pair\_name) | Strongly suggested to leave this to the default, that is to NOT associate any key-pair with the instances. In case SSH access is desired, provide the name of a valid EC2 Key Pair. | `string` | `null` | no |
-| <a name="input_startup_script_base64"></a> [startup\_script\_base64](#input\_startup\_script\_base64) | Strongly suggested to NOT run custom startup scripts on DiscrimiNAT Firewall instances. But if you had to, supply a base64 encoded version here. | `string` | `null` | no |
+| <a name="input_user_data_base64"></a> [user\_data\_base64](#input\_user\_data\_base64) | Strongly suggested to NOT run custom startup scripts on DiscrimiNAT Firewall instances. But if you had to, supply a base64 encoded version here. | `string` | `null` | no |
 | <a name="input_ami_owner"></a> [ami\_owner](#input\_ami\_owner) | Reserved for use with Chaser support. Allows overriding the source AMI account for the DiscrimiNAT Firewall instances. | `string` | `null` | no |
 | <a name="input_ami_name"></a> [ami\_name](#input\_ami\_name) | Reserved for use with Chaser support. Allows overriding the source AMI version for the DiscrimiNAT Firewall instances. | `string` | `null` | no |
 ## Outputs
