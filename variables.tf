@@ -62,12 +62,12 @@ variable "per_az_max_instances" {
 
 variable "instance_size" {
   type        = string
-  description = "The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet and for accounts with a large number of VMs, you may want to choose a machine type with more CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6i.2xlarge` , `c6a.large` , `c6a.xlarge` , `c6a.2xlarge` , `c5.large` , `c5.xlarge` , `c5.2xlarge` ."
+  description = "The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet and for accounts with a large number of VMs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` ."
   default     = "t3.small"
 
   validation {
-    condition     = contains(["t3.small", "c6i.large", "c6i.xlarge", "c6i.2xlarge", "c6a.large", "c6a.xlarge", "c6a.2xlarge", "c5.large", "c5.xlarge", "c5.2xlarge"], var.instance_size)
-    error_message = "Variable `instance_size` must be set to one of `t3.small` , `c6i.large` , `c6i.xlarge` , `c6i.2xlarge` , `c6a.large` , `c6a.xlarge` , `c6a.2xlarge` , `c5.large` , `c5.xlarge` , `c5.2xlarge` ."
+    condition     = contains(["t3.small", "c6i.large", "c6i.xlarge", "c6a.large", "c6a.xlarge"], var.instance_size)
+    error_message = "Variable `instance_size` must be set to one of `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` ."
   }
 }
 
@@ -77,7 +77,7 @@ variable "key_pair_name" {
   default     = null
 }
 
-variable "startup_script_base64" {
+variable "user_data_base64" {
   type        = string
   description = "Strongly suggested to NOT run custom startup scripts on DiscrimiNAT Firewall instances. But if you had to, supply a base64 encoded version here."
   default     = null

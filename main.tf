@@ -90,7 +90,7 @@ resource "aws_launch_template" "discriminat" {
   }
 
   key_name  = var.key_pair_name
-  user_data = var.startup_script_base64
+  user_data = var.user_data_base64
 
   tags = local.tags
 }

@@ -2,7 +2,7 @@ locals {
   tags = merge(
     {
       "Name" : "DiscrimiNAT",
-      "documentation" : "https://chasersystems.com/docs"
+      "documentation" : "https://chasersystems.com/docs/"
     },
     var.tags
   )
