@@ -8,7 +8,7 @@ HTTPS, TLS, SSH, SFTP **micro-segmentation** firewall to filter VPC egress by ho
 
 ---
 
-[2-minute Demo Video](https://chasersystems.com/discriminat/aws/demo) | [Product Reviews at G2](https://www.g2.com/products/discriminat-firewall/reviews) | [AWS Marketplace Subscription (required)](https://aws.amazon.com/marketplace/pp/prodview-gdrdl5m67w6vg)
+[2-minute Demo Video](https://chasersystems.com/discriminat/aws/demo) | [Product Reviews at G2](https://www.g2.com/products/discriminat-firewall/reviews) | [AWS Marketplace Subscription (required)](https://aws.amazon.com/marketplace/pp/prodview-7ulmdnoq5jnwu)
 
 ---
 
