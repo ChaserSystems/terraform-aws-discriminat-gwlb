@@ -25,7 +25,7 @@ data "aws_ami" "discriminat" {
 
   filter {
     name   = var.ami_owner == null ? "product-code" : "owner-id"
-    values = [var.ami_owner == null ? "bz1yq0sc5ta99w5j7jjwzym8g" : var.ami_owner]
+    values = [var.ami_owner == null ? var.byol == null ? "bz1yq0sc5ta99w5j7jjwzym8g" : "a7z5gi2mkpzvo93r2e8csl2ld" : var.ami_owner]
   }
 
   filter {
