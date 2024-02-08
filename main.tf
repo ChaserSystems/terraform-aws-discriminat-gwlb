@@ -90,7 +90,7 @@ resource "aws_launch_template" "discriminat" {
   }
 
   key_name  = var.key_pair_name
-  user_data = var.user_data_base64
+  user_data = var.user_data_base64 != null ? var.user_data_base64 : local.cloud_config == "" ? null : base64encode(local.cloud_config)
 
   tags = local.tags
 }

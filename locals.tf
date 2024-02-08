@@ -17,3 +17,16 @@ locals {
 locals {
   max_possible_instances = (var.high_availability_mode == "cross-zone" ? var.per_region_max_instances : length(var.public_subnets) * var.per_az_max_instances)
 }
+
+locals {
+  cc_byol = var.byol == null ? "" : "- encoding: base64\n  path: /etc/chaser/licence-key.der\n  permissions: 0404\n  content: ${var.byol}\n"
+  cc_ashr = var.ashr == true ? "" : "- path: /etc/chaser/disable_automated-system-health-reporting\n  permissions: 0404\n"
+}
+
+locals {
+  cc_write_files = "${local.cc_byol}${local.cc_ashr}"
+}
+
+locals {
+  cloud_config = local.cc_write_files == "" ? "" : "#cloud-config\nwrite_files:\n${local.cc_write_files}"
+}

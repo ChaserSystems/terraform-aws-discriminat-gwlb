@@ -94,3 +94,16 @@ variable "ami_name" {
   description = "Reserved for use with Chaser support. Allows overriding the source AMI version for the DiscrimiNAT Firewall instances."
   default     = null
 }
+
+variable "byol" {
+  type        = string
+  sensitive   = true
+  default     = null
+  description = "If using the BYOL version from the marketplace, supply the licence key as supplied by Chaser Systems here."
+}
+
+variable "ashr" {
+  type        = bool
+  default     = true
+  description = "Automated System Health Reporting. See note in README to learn more. Set to false to disable. Default is true and hence enabled."
+}
