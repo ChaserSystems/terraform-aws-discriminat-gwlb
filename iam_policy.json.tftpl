@@ -1,0 +1,55 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:logs:*:*:log-group:DiscrimiNAT:log-stream:*"
+      ]
+    },
+    {
+      "Action": [
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeAddresses"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "ssm:GetParameter"
+      ],
+      "Effect": "Allow",
+      "Resource": ${iam_get_json_ssm_params}
+    },
+%{ if iam_get_json_secrets != "[]" }
+    {
+      "Action": [
+        "secretsmanager:GetSecretValue"
+      ],
+      "Effect": "Allow",
+      "Resource": ${iam_get_json_secrets}
+    },
+%{endif}
+    {
+      "Action": [
+        "ec2:ModifyInstanceAttribute",
+        "ec2:AssociateAddress"
+      ],
+      "Condition": {
+        "Null": {
+          "aws:ResourceTag/discriminat": false
+        }
+      },
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ],
+  "Version": "2012-10-17"
+}
