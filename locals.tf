@@ -30,3 +30,11 @@ locals {
 locals {
   cloud_config = local.cc_write_files == "" ? "" : "#cloud-config\nwrite_files:\n${local.cc_write_files}"
 }
+
+locals {
+  iam_get_merged_ssm_params = concat(["arn:aws:ssm:*:*:parameter/DiscrimiNAT*"], var.iam_get_additional_ssm_params)
+  iam_get_json_ssm_params   = jsonencode(local.iam_get_merged_ssm_params)
+  iam_get_json_secrets      = jsonencode(var.iam_get_additional_secrets)
+
+  iam_policy_json = templatefile("${path.module}/iam_policy.json.tftpl", { iam_get_json_ssm_params = local.iam_get_json_ssm_params, iam_get_json_secrets = local.iam_get_json_secrets })
+}

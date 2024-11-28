@@ -4,47 +4,7 @@ resource "aws_iam_policy" "discriminat" {
     create_before_destroy = true
   }
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents",
-        "logs:DescribeLogStreams"
-      ],
-      "Resource": [
-        "arn:aws:logs:*:*:log-group:DiscrimiNAT:log-stream:*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeAddresses"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:ModifyInstanceAttribute",
-        "ec2:AssociateAddress"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "Null": {
-          "aws:ResourceTag/discriminat": false
-        }
-      }
-    }
-  ]
-}
-EOF
+  policy = local.iam_policy_json
 }
 
 resource "aws_iam_role" "discriminat" {

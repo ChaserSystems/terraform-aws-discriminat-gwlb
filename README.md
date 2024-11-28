@@ -229,6 +229,23 @@ module "discriminat" {
   public_subnets  = module.aws_vpc.public_subnets
   private_subnets = module.aws_vpc.private_subnets
 
+  # iam_get_additional_ssm_params = [
+  #   "arn:aws:ssm:eu-west-2:000000000000:parameter/team1-list",
+  #   "arn:aws:ssm:eu-west-2:111111111111:parameter/service1-list"
+  # ]
+  # iam_get_additional_secrets = [
+  #   "arn:aws:secretsmanager:eu-west-2:000000000000:secret:service-a-allowed-egress-fqdns",
+  #   "arn:aws:secretsmanager:eu-west-2:111111111111:secret:service-b-allowed-egress-fqdns"
+  # ]
+
+  # preferences = <<EOF
+  # {
+  #   "%default": {
+  #     "flow_log_verbosity": "only_disallowed"
+  #   }
+  # }
+  # EOF
+
   depends_on = [module.aws_vpc_endpoints]
 }
 
@@ -418,6 +435,7 @@ ashr = false
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_preferences"></a> [preferences](#input\_preferences) | Default preferences. See docs at https://chasersystems.com/docs/discriminat/aws/default-prefs/ | `string` | `"{\n  \"%default\": {\n    \"wildcard_exposure\": \"prohibit_public_suffix\",\n    \"flow_log_verbosity\": \"full\",\n    \"see_thru\": null,\n    \"x509_crls\": \"ignore\"\n  }\n}\n"` | no |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | The IDs of the Public Subnets to deploy the DiscrimiNAT Firewall instances in. These must have routing to the Internet via an Internet Gateway already. | `list(string)` | n/a | yes |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The IDs of the Private Subnets where the workload, of which the egress is to be filtered, resides. A Gateway Load Balancer (GWLB) will be deployed in these, and a map of Private Subnets' Route Table IDs to VPC Endpoint IDs (GWLB) will be emitted in the `target_gwlb_endpoints` output field. | `list(string)` | n/a | yes |
 | <a name="input_connection_draining_time"></a> [connection\_draining\_time](#input\_connection\_draining\_time) | In seconds, the amount of time to allow for existing flows to end naturally. During an instance-refresh or a scale-in activity, a DiscrimiNAT Firewall instance will not be terminated for at least this long to prevent abrupt interruption of existing flows. | `number` | `150` | no |
@@ -430,8 +448,11 @@ ashr = false
 | <a name="input_instance_size"></a> [instance\_size](#input\_instance\_size) | The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet and for accounts with a large number of VMs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` . | `string` | `"t3.small"` | no |
 | <a name="input_key_pair_name"></a> [key\_pair\_name](#input\_key\_pair\_name) | Strongly suggested to leave this to the default, that is to NOT associate any key-pair with the instances. In case SSH access is desired, provide the name of a valid EC2 Key Pair. | `string` | `null` | no |
 | <a name="input_user_data_base64"></a> [user\_data\_base64](#input\_user\_data\_base64) | Strongly suggested to NOT run custom startup scripts on DiscrimiNAT Firewall instances. But if you had to, supply a base64 encoded version here. | `string` | `null` | no |
-| <a name="input_ami_owner"></a> [ami\_owner](#input\_ami\_owner) | Reserved for use with Chaser support. Allows overriding the source AMI account for the DiscrimiNAT Firewall instances. | `string` | `null` | no |
-| <a name="input_ami_name"></a> [ami\_name](#input\_ami\_name) | Reserved for use with Chaser support. Allows overriding the source AMI version for the DiscrimiNAT Firewall instances. | `string` | `null` | no |
+| <a name="input_ami_owner"></a> [ami\_owner](#input\_ami\_owner) | Reserved for use with Chaser support. Allows overriding the source AMI account for the DiscrimiNAT Firewall instances. | `string` | `"aws-marketplace"` | no |
+| <a name="input_ami_version"></a> [ami\_version](#input\_ami\_version) | Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT Firewall instances. | `string` | `"2.9.0"` | no |
+| <a name="input_ami_auto_update"></a> [ami\_auto\_update](#input\_ami\_auto\_update) | Automatically look up and use the latest version of DiscrimiNAT image available from `ami_owner`. When this is set to `true`, `ami_version` is ignored. | `bool` | `true` | no |
+| <a name="input_iam_get_additional_ssm_params"></a> [iam\_get\_additional\_ssm\_params](#input\_iam\_get\_additional\_ssm\_params) | A list of additional SSM Parameters' full ARNs to apply the `ssm:GetParameter` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed. `arn:aws:ssm:*:*:parameter/DiscrimiNAT*` is always included. | `list(string)` | `[]` | no |
+| <a name="input_iam_get_additional_secrets"></a> [iam\_get\_additional\_secrets](#input\_iam\_get\_additional\_secrets) | A list of additional Secrets' full ARNs (in Secrets Manager) to apply the `secretsmanager:GetSecretValue` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed. | `list(string)` | `[]` | no |
 | <a name="input_byol"></a> [byol](#input\_byol) | If using the BYOL version from the marketplace, supply the licence key as supplied by Chaser Systems here. | `string` | `null` | no |
 | <a name="input_ashr"></a> [ashr](#input\_ashr) | Automated System Health Reporting. See note in README to learn more. Set to false to disable. Default is true and hence enabled. | `bool` | `true` | no |
 ## Outputs
@@ -456,6 +477,7 @@ ashr = false
 | [aws_lb_listener.discriminat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
 | [aws_lb_target_group.discriminat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) | resource |
 | [aws_security_group.discriminat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_ssm_parameter.preferences](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 | [aws_vpc_endpoint.discriminat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [aws_vpc_endpoint_service.discriminat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint_service) | resource |
 | [aws_ami.discriminat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |

@@ -1,3 +1,18 @@
+variable "preferences" {
+  type        = string
+  description = "Default preferences. See docs at https://chasersystems.com/docs/discriminat/aws/default-prefs/"
+  default     = <<EOF
+{
+  "%default": {
+    "wildcard_exposure": "prohibit_public_suffix",
+    "flow_log_verbosity": "full",
+    "see_thru": null,
+    "x509_crls": "ignore"
+  }
+}
+  EOF
+}
+
 variable "public_subnets" {
   type        = list(string)
   description = "The IDs of the Public Subnets to deploy the DiscrimiNAT Firewall instances in. These must have routing to the Internet via an Internet Gateway already."
@@ -86,13 +101,32 @@ variable "user_data_base64" {
 variable "ami_owner" {
   type        = string
   description = "Reserved for use with Chaser support. Allows overriding the source AMI account for the DiscrimiNAT Firewall instances."
-  default     = null
+  default     = "aws-marketplace"
 }
 
-variable "ami_name" {
+variable "ami_version" {
   type        = string
-  description = "Reserved for use with Chaser support. Allows overriding the source AMI version for the DiscrimiNAT Firewall instances."
-  default     = null
+  description = "Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT Firewall instances."
+  default     = "2.9.0"
+}
+
+variable "ami_auto_update" {
+  type        = bool
+  description = "Automatically look up and use the latest version of DiscrimiNAT image available from `ami_owner`. When this is set to `true`, `ami_version` is ignored."
+  default     = true
+}
+
+
+variable "iam_get_additional_ssm_params" {
+  type        = list(string)
+  description = "A list of additional SSM Parameters' full ARNs to apply the `ssm:GetParameter` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed. `arn:aws:ssm:*:*:parameter/DiscrimiNAT*` is always included."
+  default     = []
+}
+
+variable "iam_get_additional_secrets" {
+  type        = list(string)
+  description = "A list of additional Secrets' full ARNs (in Secrets Manager) to apply the `secretsmanager:GetSecretValue` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed."
+  default     = []
 }
 
 variable "byol" {
