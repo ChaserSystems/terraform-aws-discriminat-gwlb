@@ -169,7 +169,7 @@ module "aws_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  azs             = ["eu-west-3a", "eu-west-3b"]
+  azs             = ["eu-west-2a", "eu-west-2b"]
   public_subnets  = ["172.16.11.0/24", "172.16.21.0/24"]
   private_subnets = ["172.16.12.0/24", "172.16.22.0/24"]
 
@@ -238,13 +238,14 @@ module "discriminat" {
   #   "arn:aws:secretsmanager:eu-west-2:111111111111:secret:service-b-allowed-egress-fqdns"
   # ]
 
-  # preferences = <<EOF
-  # {
-  #   "%default": {
-  #     "flow_log_verbosity": "only_disallowed"
-  #   }
-  # }
-  # EOF
+  preferences = <<EOF
+  {
+    "%default": {
+      "flow_log_verbosity": "full",
+      "see_thru": "2026-01-19"
+    }
+  }
+  EOF
 
   depends_on = [module.aws_vpc_endpoints]
 }
@@ -382,7 +383,7 @@ resource "aws_security_group_rule" "monitor_and_log" {
 
   # The `see-thru` mode accepts a valid date in YYYY-mm-dd format. Full syntax
   # at https://chasersystems.com/docs/discriminat/aws/config-ref#see-thru-mode
-  description = "discriminat:see-thru:2022-12-31"
+  description = "discriminat:see-thru:2026-01-19"
 }
 ```
 </details>

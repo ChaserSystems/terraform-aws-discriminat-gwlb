@@ -5,6 +5,8 @@ resource "aws_iam_policy" "discriminat" {
   }
 
   policy = local.iam_policy_json
+
+  tags = local.tags
 }
 
 resource "aws_iam_role" "discriminat" {
@@ -43,4 +45,6 @@ resource "aws_iam_instance_profile" "discriminat" {
   }
 
   role = aws_iam_role.discriminat.name
+
+  tags = local.tags
 }

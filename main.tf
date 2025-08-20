@@ -253,4 +253,6 @@ resource "aws_ssm_parameter" "preferences" {
   name           = "DiscrimiNAT"
   type           = "String"
   insecure_value = var.preferences
+
+  tags = local.tags
 }
