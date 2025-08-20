@@ -319,14 +319,14 @@ locals {
   discriminat_saas_auth  = format("discriminat:tls:%s", join(",", local.fqdns_saas_auth))
 }
 
-resource "aws_security_group" "foo" {
+resource "aws_security_group" "bar" {
   # You could use a data source or get a reference from another resource for the
   # VPC ID.
   vpc_id = module.aws_vpc.vpc_id
 }
 
 resource "aws_security_group_rule" "saas_auth" {
-  security_group_id = aws_security_group.foo.id
+  security_group_id = aws_security_group.bar.id
 
   type      = "egress"
   from_port = 443
@@ -340,7 +340,7 @@ resource "aws_security_group_rule" "saas_auth" {
 }
 
 resource "aws_security_group_rule" "sftp_banks" {
-  security_group_id = aws_security_group.foo.id
+  security_group_id = aws_security_group.bar.id
 
   type        = "egress"
   from_port   = 22
