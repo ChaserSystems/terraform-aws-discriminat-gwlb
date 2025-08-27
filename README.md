@@ -169,7 +169,7 @@ module "aws_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  azs             = ["eu-west-3a", "eu-west-3b"]
+  azs             = ["eu-west-2a", "eu-west-2b"]
   public_subnets  = ["172.16.11.0/24", "172.16.21.0/24"]
   private_subnets = ["172.16.12.0/24", "172.16.22.0/24"]
 
@@ -238,13 +238,14 @@ module "discriminat" {
   #   "arn:aws:secretsmanager:eu-west-2:111111111111:secret:service-b-allowed-egress-fqdns"
   # ]
 
-  # preferences = <<EOF
-  # {
-  #   "%default": {
-  #     "flow_log_verbosity": "only_disallowed"
-  #   }
-  # }
-  # EOF
+  preferences = <<EOF
+  {
+    "%default": {
+      "flow_log_verbosity": "full",
+      "see_thru": "2026-01-19"
+    }
+  }
+  EOF
 
   depends_on = [module.aws_vpc_endpoints]
 }
@@ -318,14 +319,14 @@ locals {
   discriminat_saas_auth  = format("discriminat:tls:%s", join(",", local.fqdns_saas_auth))
 }
 
-resource "aws_security_group" "foo" {
+resource "aws_security_group" "bar" {
   # You could use a data source or get a reference from another resource for the
   # VPC ID.
   vpc_id = module.aws_vpc.vpc_id
 }
 
 resource "aws_security_group_rule" "saas_auth" {
-  security_group_id = aws_security_group.foo.id
+  security_group_id = aws_security_group.bar.id
 
   type      = "egress"
   from_port = 443
@@ -339,7 +340,7 @@ resource "aws_security_group_rule" "saas_auth" {
 }
 
 resource "aws_security_group_rule" "sftp_banks" {
-  security_group_id = aws_security_group.foo.id
+  security_group_id = aws_security_group.bar.id
 
   type        = "egress"
   from_port   = 22
@@ -382,7 +383,7 @@ resource "aws_security_group_rule" "monitor_and_log" {
 
   # The `see-thru` mode accepts a valid date in YYYY-mm-dd format. Full syntax
   # at https://chasersystems.com/docs/discriminat/aws/config-ref#see-thru-mode
-  description = "discriminat:see-thru:2022-12-31"
+  description = "discriminat:see-thru:2026-01-19"
 }
 ```
 </details>
@@ -412,7 +413,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 
 ## Automated System Health Reporting
 
-10 minutes after boot, at 0200 UTC every day and once at shutdown, each instance of DiscrimiNAT will collect its OS internals & system logs since instance creation, config changes & traffic flow information from last two hours and upload it to a Chaser-owned cloud bucket. This information is encrypted at rest with a certain public key so only relevant individuals with access to the corresponding private key can decrypt it. The transfer is encrypted over TLS.
+10 minutes after boot, a few minutes before 0200 UTC every day and once at shutdown, each instance of DiscrimiNAT will collect its OS internals & system logs since instance creation, config changes & traffic flow information from last two hours and upload it to a Chaser-owned cloud bucket. This information is encrypted at rest with a certain public key so only relevant individuals with access to the corresponding private key can decrypt it. The transfer is encrypted over TLS.
 
 Access to this information is immensely useful to create a faster and more reliable DiscrimiNAT as we add new features. We also aim to learn about how users are interacting with the product in order to further improve the usability of it as they embark on a very ambitious journey of fully accounted for and effective egress controls.
 
@@ -449,7 +450,7 @@ ashr = false
 | <a name="input_key_pair_name"></a> [key\_pair\_name](#input\_key\_pair\_name) | Strongly suggested to leave this to the default, that is to NOT associate any key-pair with the instances. In case SSH access is desired, provide the name of a valid EC2 Key Pair. | `string` | `null` | no |
 | <a name="input_user_data_base64"></a> [user\_data\_base64](#input\_user\_data\_base64) | Strongly suggested to NOT run custom startup scripts on DiscrimiNAT Firewall instances. But if you had to, supply a base64 encoded version here. | `string` | `null` | no |
 | <a name="input_ami_owner"></a> [ami\_owner](#input\_ami\_owner) | Reserved for use with Chaser support. Allows overriding the source AMI account for the DiscrimiNAT Firewall instances. | `string` | `"aws-marketplace"` | no |
-| <a name="input_ami_version"></a> [ami\_version](#input\_ami\_version) | Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT Firewall instances. | `string` | `"2.9.0"` | no |
+| <a name="input_ami_version"></a> [ami\_version](#input\_ami\_version) | Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT Firewall instances. | `string` | `"2.20"` | no |
 | <a name="input_ami_auto_update"></a> [ami\_auto\_update](#input\_ami\_auto\_update) | Automatically look up and use the latest version of DiscrimiNAT image available from `ami_owner`. When this is set to `true`, `ami_version` is ignored. | `bool` | `true` | no |
 | <a name="input_iam_get_additional_ssm_params"></a> [iam\_get\_additional\_ssm\_params](#input\_iam\_get\_additional\_ssm\_params) | A list of additional SSM Parameters' full ARNs to apply the `ssm:GetParameter` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed. `arn:aws:ssm:*:*:parameter/DiscrimiNAT*` is always included. | `list(string)` | `[]` | no |
 | <a name="input_iam_get_additional_secrets"></a> [iam\_get\_additional\_secrets](#input\_iam\_get\_additional\_secrets) | A list of additional Secrets' full ARNs (in Secrets Manager) to apply the `secretsmanager:GetSecretValue` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed. | `list(string)` | `[]` | no |

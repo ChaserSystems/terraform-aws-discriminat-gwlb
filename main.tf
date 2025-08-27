@@ -18,6 +18,14 @@ resource "aws_security_group" "discriminat" {
   ingress {
     from_port   = 1042
     to_port     = 1042
+    protocol    = "udp"
+    self        = true
+    description = "DiscrimiNATs sync"
+  }
+
+  ingress {
+    from_port   = 1042
+    to_port     = 1042
     protocol    = "tcp"
     cidr_blocks = [data.aws_vpc.context.cidr_block]
     description = "health check service"
@@ -82,6 +90,11 @@ resource "aws_launch_template" "discriminat" {
 
   tag_specifications {
     resource_type = "instance"
+    tags          = merge(local.tags, { "discriminat" : "self-manage" })
+  }
+
+  tag_specifications {
+    resource_type = "network-interface"
     tags          = merge(local.tags, { "discriminat" : "self-manage" })
   }
   tag_specifications {
@@ -240,4 +253,6 @@ resource "aws_ssm_parameter" "preferences" {
   name           = "DiscrimiNAT"
   type           = "String"
   insecure_value = var.preferences
+
+  tags = local.tags
 }
