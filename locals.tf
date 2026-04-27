@@ -36,5 +36,7 @@ locals {
   iam_get_json_ssm_params   = jsonencode(local.iam_get_merged_ssm_params)
   iam_get_json_secrets      = jsonencode(var.iam_get_additional_secrets)
 
-  iam_policy_json = templatefile("${path.module}/iam_policy.json.tftpl", { iam_get_json_ssm_params = local.iam_get_json_ssm_params, iam_get_json_secrets = local.iam_get_json_secrets })
+  custom_deployment_id = var.custom_deployment_id
+
+  iam_policy_json = templatefile("${path.module}/iam_policy.json.tftpl", { iam_get_json_ssm_params = local.iam_get_json_ssm_params, iam_get_json_secrets = local.iam_get_json_secrets, custom_deployment_id = local.custom_deployment_id })
 }
