@@ -65,8 +65,9 @@ resource "aws_launch_template" "discriminat" {
   }
 
   metadata_options {
-    http_endpoint = "enabled"
-    http_tokens   = "required"
+    http_endpoint          = "enabled"
+    http_tokens            = "required"
+    instance_metadata_tags = "enabled"
   }
 
   block_device_mappings {
@@ -90,12 +91,12 @@ resource "aws_launch_template" "discriminat" {
 
   tag_specifications {
     resource_type = "instance"
-    tags          = merge(local.tags, { "discriminat" : "self-manage" })
+    tags          = merge(local.tags, { "discriminat" : var.custom_deployment_id })
   }
 
   tag_specifications {
     resource_type = "network-interface"
-    tags          = merge(local.tags, { "discriminat" : "self-manage" })
+    tags          = merge(local.tags, { "discriminat" : var.custom_deployment_id })
   }
   tag_specifications {
     resource_type = "volume"

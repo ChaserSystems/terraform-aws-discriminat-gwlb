@@ -141,3 +141,9 @@ variable "ashr" {
   default     = true
   description = "Automated System Health Reporting. See note in README to learn more. Set to false to disable. Default is true and hence enabled."
 }
+
+variable "custom_deployment_id" {
+  type        = string
+  description = "Override the default Deployment ID (DiscrimiNAT) for this deployment. This is a unique identifier for this deployment that may help with naming, labelling and associating other objects (such as External IPs and CloudWatch Log Group Names) to only this set of DiscrimiNAT instances – earmarking from other, parallel deployments."
+  default     = "DiscrimiNAT"
+}
