@@ -20,7 +20,7 @@ variable "public_subnets" {
 
 variable "private_subnets" {
   type        = list(string)
-  description = "The IDs of the Private Subnets where the workload, of which the egress is to be filtered, resides. A Gateway Load Balancer (GWLB) will be deployed in these, and a map of Private Subnets' Route Table IDs to VPC Endpoint IDs (GWLB) will be emitted in the `target_gwlb_endpoints` output field."
+  description = "The IDs of the Private Subnets where Gateway Load Balancer (GWLB) Endpoints will be deployed – these are also usually the workload subnets. A map of these subnets' Route Table IDs to GWLB VPC Endpoint IDs will be emitted in the `target_gwlb_endpoints` output field."
 }
 
 variable "connection_draining_time" {
