@@ -144,6 +144,6 @@ variable "ashr" {
 
 variable "custom_deployment_id" {
   type        = string
-  description = "Override the default Deployment ID (DiscrimiNAT) for this deployment. This is a unique identifier for this deployment that may help with naming, labelling and associating other objects (such as External IPs and CloudWatch Log Group Names) to only this set of DiscrimiNAT instances – earmarking from other, parallel deployments."
-  default     = "DiscrimiNAT"
+  description = "Override the default Deployment ID for this deployment. This is a unique identifier for this deployment that may help with naming, labelling and associating other objects (such as External IPs, CloudWatch Log Group Names and Default Preferences) to only this set of DiscrimiNAT instances – earmarking from other, parallel deployments. A value of `%default` results in no override and will not suffix a `custom_deployment_id` to resource names, labels or tags."
+  default     = "%default"
 }
