@@ -242,7 +242,7 @@ module "discriminat" {
   {
     "%default": {
       "flow_log_verbosity": "full",
-      "see_thru": "2026-01-19"
+      "see_thru": "2026-12-19"
     }
   }
   EOF
@@ -383,7 +383,7 @@ resource "aws_security_group_rule" "monitor_and_log" {
 
   # The `see-thru` mode accepts a valid date in YYYY-mm-dd format. Full syntax
   # at https://chasersystems.com/docs/discriminat/aws/config-ref#see-thru-mode
-  description = "discriminat:see-thru:2026-01-19"
+  description = "discriminat:see-thru:2026-12-19"
 }
 ```
 </details>
