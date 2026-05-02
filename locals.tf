@@ -1,7 +1,7 @@
 locals {
   tags = merge(
     {
-      "Name" : "DiscrimiNAT",
+      "Name" : local.suffixed_deployment_id,
       "documentation" : "https://chasersystems.com/docs/"
       "llms_txt" : "https://chasersystems.com/llms.txt"
     },

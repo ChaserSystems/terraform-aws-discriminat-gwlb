@@ -251,7 +251,7 @@ resource "aws_lb_listener" "discriminat" {
 }
 
 resource "aws_ssm_parameter" "preferences" {
-  name           = "DiscrimiNAT"
+  name           = local.suffixed_deployment_id
   type           = "String"
   insecure_value = var.preferences
 
