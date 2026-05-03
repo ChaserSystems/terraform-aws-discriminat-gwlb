@@ -103,7 +103,7 @@ In the `intra-zone` mode, the GWLB will distribute traffic evenly across all Dis
 
 ## Elastic IPs
 
-If a Public IP is not found attached to a DiscrimiNAT instance, it will look for any allocated but unassociated Elastic IPs that have a tag-key named `discriminat` (set to any value.) One of such Elastic IPs will be attempted to be associated with itself then.
+If a Public IP is not found attached to a DiscrimiNAT instance, it will look for any allocated but unassociated Elastic IPs that have a tag-key named `discriminat` set to the value of the variable `custom_deployment_id` in this module, if that was set, else anything but blank. One of such Elastic IPs will be attempted to be associated with itself then.
 
 > **Note**\
 > This allows you to have a stable set of static IPs to share with your partners, who may wish to allowlist/whitelist them.
@@ -147,7 +147,7 @@ resource "aws_eip" "nat" {
   count = 3
 
   tags = {
-    "discriminat" : "some-comment",
+    "discriminat" : "some-comment", # or set the value to variable custom_deployment_id of this module, if that was set
     "Name" : "egress-ip-reserved"
   }
 
