@@ -8,7 +8,7 @@ HTTPS, TLS, SSH, SFTP **micro-segmentation** firewall to filter VPC egress by ho
 
 ---
 
-[2-minute Demo Video](https://chasersystems.com/discriminat/aws/demo) | [Product Reviews at G2](https://www.g2.com/products/discriminat-firewall/reviews) | [AWS Marketplace Subscription (required)](https://aws.amazon.com/marketplace/pp/prodview-7ulmdnoq5jnwu) | [LLMS_TXT](https://chasersystems.com/llms.txt)
+[2-minute Demo Video](https://chasersystems.com/discriminat/aws/demo/) | [Product Reviews at G2](https://www.g2.com/products/discriminat-firewall/reviews) | [AWS Marketplace Subscription (required)](https://aws.amazon.com/marketplace/pp/prodview-7ulmdnoq5jnwu) | [LLMS_TXT](https://chasersystems.com/llms.txt)
 
 ---
 
@@ -43,7 +43,7 @@ Architecture with [Gateway Load Balancer (GWLB)](https://aws.amazon.com/elasticl
 
 ## Quick Allowlist Building
 
-Use the `see-thru` mode to discover what needs to be in the allowlist for an app, by monitoring its outbound network activity first. Follow our [building an allowlist from scratch](https://chasersystems.com/docs/discriminat/aws/logs-ref#building-an-allowlist-from-scratch) recipe for use with CloudWatch.
+Use the `see-thru` mode to discover what needs to be in the allowlist for an app, by monitoring its outbound network activity first. Follow our [building an allowlist from scratch](https://chasersystems.com/docs/discriminat/aws/logs-ref/#building-an-allowlist-from-scratch-video-version) recipe for use with CloudWatch.
 
 > **Note**\
 > Terraform example of a `see-thru` Security Group is [here](#allowlist-building-examples).
@@ -86,7 +86,7 @@ In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traff
 
 ### Intra-Zone
 
-In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DiscrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ. Please note this does not fully protect you against the failure of an entire AZ on the Amazon side, however your other services in the zone would potentially be impacted too and therefore not sending egress traffic.
+In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DiscrimiNAT Firewall instances in the same AZ as the clients. For effective high-availability, this mode will need at least two instances per deployed AZ. Please note this does not fully protect you against the failure of an entire AZ on the Amazon side, however your other services in the zone would potentially be impacted too and therefore not sending egress traffic.
 
 > **Note**\
 > Terraform variable `high_availability_mode` should be set to `intra-zone`.
@@ -106,7 +106,7 @@ In the `intra-zone` mode, the GWLB will distribute traffic evenly across all Dis
 If a Public IP is not found attached to a DiscrimiNAT instance, it will look for any allocated but unassociated Elastic IPs that have a tag-key named `discriminat` set to the value of the variable `custom_deployment_id` in this module, if that was set, else anything but blank. One of such Elastic IPs will be attempted to be associated with itself then.
 
 > **Note**\
-> This allows you to have a stable set of static IPs to share with your partners, who may wish to allowlist/whitelist them.
+> This allows you to have a stable set of static IPs to share with your partners, who may wish to allowlist them.
 
 The IAM permissions needed to do this are already a part of this module. Specifically, they are:
 
@@ -292,7 +292,7 @@ resource "aws_security_group_rule" "saas_monitoring" {
   cidr_blocks = ["0.0.0.0/0"]
 
   # You could simply embed the allowed FQDNs, comma-separated, like below. Full
-  # syntax at https://chasersystems.com/docs/discriminat/aws/config-ref
+  # syntax at https://chasersystems.com/docs/discriminat/aws/config-ref/
   description = "discriminat:tls:app.datadoghq.com,collector.newrelic.com"
 }
 ```
@@ -382,7 +382,7 @@ resource "aws_security_group_rule" "monitor_and_log" {
   cidr_blocks = ["0.0.0.0/0"]
 
   # The `see-thru` mode accepts a valid date in YYYY-mm-dd format. Full syntax
-  # at https://chasersystems.com/docs/discriminat/aws/config-ref#see-thru-mode
+  # at https://chasersystems.com/docs/discriminat/aws/config-ref/#see-thru-mode
   description = "discriminat:see-thru:2026-12-19"
 }
 ```
@@ -400,7 +400,7 @@ filter see_thru_exerted AND see_thru_gid = "sg-00replaceme00"
 
 ![](https://chasersystems.com/img/log-insights-after-see-thru-log-capture.gif)
 
-See our website for full documentation on [building an allowlist from scratch](https://chasersystems.com/docs/discriminat/aws/logs-ref#building-an-allowlist-from-scratch).
+See our website for full documentation on [building an allowlist from scratch](https://chasersystems.com/docs/discriminat/aws/logs-ref/#building-an-allowlist-from-scratch-video-version).
 
 ---
 
@@ -408,7 +408,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 
 * Contact our [DevSecOps Support](mailto:devsecops@chasersystems.com) for help and queries at any stage of your journey. You will be connected with a highly-skilled engineer from the first interaction.
 * Check out the [full documentation on our website](https://chasersystems.com/docs/).
-* [LLMS_TXT](https://chasersystems.com/llms.txt) for your AI Agent.
+* Let your AI Agent know about our [LLMS_TXT](https://chasersystems.com/llms.txt).
 
 ---
 
@@ -416,7 +416,7 @@ See our website for full documentation on [building an allowlist from scratch](h
 
 10 minutes after boot, a few minutes before 0200 UTC every day and once at shutdown, each instance of DiscrimiNAT will collect its OS internals & system logs since instance creation, config changes & traffic flow information from last two hours and upload it to a Chaser-owned cloud bucket. This information is encrypted at rest with a certain public key so only relevant individuals with access to the corresponding private key can decrypt it. The transfer is encrypted over TLS.
 
-Access to this information is immensely useful to create a faster and more reliable DiscrimiNAT as we add new features. We also aim to learn about how users are interacting with the product in order to further improve the usability of it as they embark on a very ambitious journey of fully accounted for and effective egress controls.
+Access to this information is immensely useful to create a faster and more reliable DiscrimiNAT as we add new features. We also aim to learn about how users interact with the product in order to further improve the usability of it as they embark on a very ambitious journey of fully accounted for and effective egress controls.
 
 We understand if certain environments within your deployment would rather not have this turned on. **To disable it,** a file at the path `/etc/chaser/disable_automated-system-health-reporting` should exist. From our Terraform module v2.7.1 onwards, this can be accomplished by setting the variable `ashr` to `false`:
 
@@ -439,7 +439,7 @@ ashr = false
 |------|-------------|------|---------|:--------:|
 | <a name="input_preferences"></a> [preferences](#input\_preferences) | Default preferences. See docs at https://chasersystems.com/docs/discriminat/aws/default-prefs/ | `string` | `"{\n  \"%default\": {\n    \"wildcard_exposure\": \"prohibit_public_suffix\",\n    \"flow_log_verbosity\": \"full\",\n    \"see_thru\": null,\n    \"x509_crls\": \"ignore\"\n  }\n}\n"` | no |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | The IDs of the Public Subnets to deploy the DiscrimiNAT Firewall instances in. These must have routing to the Internet via an Internet Gateway already. | `list(string)` | n/a | yes |
-| <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The IDs of the Private Subnets where the workload, of which the egress is to be filtered, resides. A Gateway Load Balancer (GWLB) will be deployed in these, and a map of Private Subnets' Route Table IDs to VPC Endpoint IDs (GWLB) will be emitted in the `target_gwlb_endpoints` output field. | `list(string)` | n/a | yes |
+| <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The IDs of the Private Subnets where Gateway Load Balancer (GWLB) Endpoints will be deployed – these are also usually the workload subnets. A map of these subnets' Route Table IDs to GWLB VPC Endpoint IDs will be emitted in the `target_gwlb_endpoints` output field. | `list(string)` | n/a | yes |
 | <a name="input_connection_draining_time"></a> [connection\_draining\_time](#input\_connection\_draining\_time) | In seconds, the amount of time to allow for existing flows to end naturally. During an instance-refresh or a scale-in activity, a DiscrimiNAT Firewall instance will not be terminated for at least this long to prevent abrupt interruption of existing flows. | `number` | `150` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Map of key-value tag pairs to apply to resources created by this module. See examples for use. | `map(any)` | `{}` | no |
 | <a name="input_high_availability_mode"></a> [high\_availability\_mode](#input\_high\_availability\_mode) | `cross-zone` or `intra-zone`. In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traffic evenly across all deployed AZs. This reduces the number of DiscrimiNAT Firewall instances you will have to run for high-availability but increases data-transfer costs. In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DiscrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ. | `string` | `"cross-zone"` | no |
@@ -447,16 +447,17 @@ ashr = false
 | <a name="input_per_region_max_instances"></a> [per\_region\_max\_instances](#input\_per\_region\_max\_instances) | In case of `high_availability_mode` set to `cross-zone`, this is the maximum number of instances across all AZs following a scale-out or an instances-refresh event. This variable is IGNORED in case of `high_availability_mode` set to `intra-zone`. | `number` | `3` | no |
 | <a name="input_per_az_min_instances"></a> [per\_az\_min\_instances](#input\_per\_az\_min\_instances) | In case of `high_availability_mode` set to `intra-zone`, this is the minimum number of instances per AZ. This variable is IGNORED in case of `high_availability_mode` set to `cross-zone`. | `number` | `2` | no |
 | <a name="input_per_az_max_instances"></a> [per\_az\_max\_instances](#input\_per\_az\_max\_instances) | In case of `high_availability_mode` set to `intra-zone`, this is the maximum number of instances per AZ following a scale-out or an instances-refresh event. This variable is IGNORED in case of `high_availability_mode` set to `cross-zone`. | `number` | `3` | no |
-| <a name="input_instance_size"></a> [instance\_size](#input\_instance\_size) | The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet and for accounts with a large number of VMs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` . | `string` | `"t3.small"` | no |
+| <a name="input_instance_size"></a> [instance\_size](#input\_instance\_size) | The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet, hundreds of FQDNs in the allowlists, or VPCs with a large number of ENIs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` . | `string` | `"t3.small"` | no |
 | <a name="input_key_pair_name"></a> [key\_pair\_name](#input\_key\_pair\_name) | Strongly suggested to leave this to the default, that is to NOT associate any key-pair with the instances. In case SSH access is desired, provide the name of a valid EC2 Key Pair. | `string` | `null` | no |
 | <a name="input_user_data_base64"></a> [user\_data\_base64](#input\_user\_data\_base64) | Strongly suggested to NOT run custom startup scripts on DiscrimiNAT Firewall instances. But if you had to, supply a base64 encoded version here. | `string` | `null` | no |
 | <a name="input_ami_owner"></a> [ami\_owner](#input\_ami\_owner) | Reserved for use with Chaser support. Allows overriding the source AMI account for the DiscrimiNAT Firewall instances. | `string` | `"aws-marketplace"` | no |
-| <a name="input_ami_version"></a> [ami\_version](#input\_ami\_version) | Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT Firewall instances. | `string` | `"2.30"` | no |
+| <a name="input_ami_version"></a> [ami\_version](#input\_ami\_version) | Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT Firewall instances. | `string` | `"2.40"` | no |
 | <a name="input_ami_auto_update"></a> [ami\_auto\_update](#input\_ami\_auto\_update) | Automatically look up and use the latest version of DiscrimiNAT image available from `ami_owner`. When this is set to `true`, `ami_version` is ignored. | `bool` | `true` | no |
 | <a name="input_iam_get_additional_ssm_params"></a> [iam\_get\_additional\_ssm\_params](#input\_iam\_get\_additional\_ssm\_params) | A list of additional SSM Parameters' full ARNs to apply the `ssm:GetParameter` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed. `arn:aws:ssm:*:*:parameter/DiscrimiNAT*` is always included. | `list(string)` | `[]` | no |
 | <a name="input_iam_get_additional_secrets"></a> [iam\_get\_additional\_secrets](#input\_iam\_get\_additional\_secrets) | A list of additional Secrets' full ARNs (in Secrets Manager) to apply the `secretsmanager:GetSecretValue` Action to in the IAM Role for DiscrimiNAT. This is useful if an allowlist referred in a Security Group lives in one and is separately managed. | `list(string)` | `[]` | no |
 | <a name="input_byol"></a> [byol](#input\_byol) | If using the BYOL version from the marketplace, supply the licence key as supplied by Chaser Systems here. | `string` | `null` | no |
 | <a name="input_ashr"></a> [ashr](#input\_ashr) | Automated System Health Reporting. See note in README to learn more. Set to false to disable. Default is true and hence enabled. | `bool` | `true` | no |
+| <a name="input_custom_deployment_id"></a> [custom\_deployment\_id](#input\_custom\_deployment\_id) | Override the default Deployment ID for this deployment. This is a unique identifier for this deployment that may help with naming, labelling and associating other objects (such as External IPs, CloudWatch Log Group Names and Default Preferences) to only this set of DiscrimiNAT instances – separating from other, parallel deployments. A value of `%default` results in no override and will not suffix a `custom_deployment_id` to resource names, labels or tags. | `string` | `"%default"` | no |
 ## Outputs
 
 | Name | Description |

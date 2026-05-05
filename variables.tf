@@ -77,7 +77,7 @@ variable "per_az_max_instances" {
 
 variable "instance_size" {
   type        = string
-  description = "The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet and for accounts with a large number of VMs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` ."
+  description = "The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet, hundreds of FQDNs in the allowlists, or VPCs with a large number of ENIs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` ."
   default     = "t3.small"
 
   validation {
@@ -144,6 +144,6 @@ variable "ashr" {
 
 variable "custom_deployment_id" {
   type        = string
-  description = "Override the default Deployment ID for this deployment. This is a unique identifier for this deployment that may help with naming, labelling and associating other objects (such as External IPs, CloudWatch Log Group Names and Default Preferences) to only this set of DiscrimiNAT instances – earmarking from other, parallel deployments. A value of `%default` results in no override and will not suffix a `custom_deployment_id` to resource names, labels or tags."
+  description = "Override the default Deployment ID for this deployment. This is a unique identifier for this deployment that may help with naming, labelling and associating other objects (such as External IPs, CloudWatch Log Group Names and Default Preferences) to only this set of DiscrimiNAT instances – separating from other, parallel deployments. A value of `%default` results in no override and will not suffix a `custom_deployment_id` to resource names, labels or tags."
   default     = "%default"
 }

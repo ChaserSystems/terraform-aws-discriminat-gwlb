@@ -1,6 +1,6 @@
 resource "aws_security_group" "discriminat" {
   name_prefix = "discriminat-"
-  description = "firewall rules for the DiscrimiNAT Firewall instances themselves, NOT for clients and applications"
+  description = "firewall rules for the DiscrimiNAT Firewall instances themselves; NOT for clients or apps"
   lifecycle {
     create_before_destroy = true
   }
