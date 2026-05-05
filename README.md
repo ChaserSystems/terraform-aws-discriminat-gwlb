@@ -62,7 +62,7 @@ The DiscrimiNAT Firewall helps your organisation achieve
 
 🇺🇸 NIST SP 800-53, [SC-7 Boundary Protection](https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_5_1_0/home?element=SC-7)
 
-✓✓ Out-of-band DNS Checks
+✓✓ Out-of-band DNS Checks (to mitigate SNI spoofing)
 
 ⇄ Bidirectional TLS 1.2+ and SSH v2 Checks
 
