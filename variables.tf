@@ -77,7 +77,7 @@ variable "per_az_max_instances" {
 
 variable "instance_size" {
   type        = string
-  description = "The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet, hundreds of FQDNs in the allowlists, or VPCs with a large number of ENIs, you may want to choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` ."
+  description = "The default of `t3.small` should suffice for light to medium levels of usage. Anything less than 2 CPU cores and 2 GB of RAM is not recommended. For faster access to the Internet, hundreds of FQDNs in the allowlists, or VPCs with a large number of ENIs, you should choose a machine type with dedicated CPU cores. Valid values are `t3.small` , `c6i.large` , `c6i.xlarge` , `c6a.large` , `c6a.xlarge` ."
   default     = "t3.small"
 
   validation {
