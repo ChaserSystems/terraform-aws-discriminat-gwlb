@@ -1,5 +1,5 @@
 output "cloudwatch_log_group_name" {
-  value       = "DiscrimiNAT"
+  value       = local.suffixed_deployment_id
   description = "Name of the CloudWatch Log Group where DiscrimiNAT instances will log traffic flow and configuration changes. Useful for automating any logging routing configuration."
 }
 

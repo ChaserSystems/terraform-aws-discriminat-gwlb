@@ -1,6 +1,6 @@
 resource "aws_security_group" "discriminat" {
   name_prefix = "discriminat-"
-  description = "firewall rules for the DiscrimiNAT Firewall instances themselves, NOT for clients and applications"
+  description = "firewall rules for the DiscrimiNAT Firewall instances themselves; NOT for clients or apps"
   lifecycle {
     create_before_destroy = true
   }
@@ -65,8 +65,9 @@ resource "aws_launch_template" "discriminat" {
   }
 
   metadata_options {
-    http_endpoint = "enabled"
-    http_tokens   = "required"
+    http_endpoint          = "enabled"
+    http_tokens            = "required"
+    instance_metadata_tags = "enabled"
   }
 
   block_device_mappings {
@@ -90,12 +91,12 @@ resource "aws_launch_template" "discriminat" {
 
   tag_specifications {
     resource_type = "instance"
-    tags          = merge(local.tags, { "discriminat" : "self-manage" })
+    tags          = merge(local.tags, { "discriminat" : var.custom_deployment_id })
   }
 
   tag_specifications {
     resource_type = "network-interface"
-    tags          = merge(local.tags, { "discriminat" : "self-manage" })
+    tags          = merge(local.tags, { "discriminat" : var.custom_deployment_id })
   }
   tag_specifications {
     resource_type = "volume"
@@ -172,7 +173,7 @@ resource "aws_autoscaling_policy" "cpu" {
   policy_type = "TargetTrackingScaling"
   target_tracking_configuration {
     disable_scale_in = false
-    target_value     = 20
+    target_value     = 50
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
@@ -250,7 +251,7 @@ resource "aws_lb_listener" "discriminat" {
 }
 
 resource "aws_ssm_parameter" "preferences" {
-  name           = "DiscrimiNAT"
+  name           = local.suffixed_deployment_id
   type           = "String"
   insecure_value = var.preferences
 

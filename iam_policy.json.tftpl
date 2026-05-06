@@ -9,7 +9,7 @@
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:logs:*:*:log-group:DiscrimiNAT:log-stream:*"
+        "arn:aws:logs:*:*:log-group:${suffixed_deployment_id}:log-stream:*"
       ]
     },
     {
