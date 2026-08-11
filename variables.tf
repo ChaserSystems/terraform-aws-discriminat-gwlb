@@ -89,7 +89,7 @@ variable "instance_size" {
 variable "additional_security_group_ids" {
   type        = list(string)
   description = "Optional list of additional Security Group IDs to attach to DiscrimiNAT instances."
-  default     = null
+  default     = []
 }
 
 variable "key_pair_name" {
