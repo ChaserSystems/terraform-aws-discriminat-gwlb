@@ -1,6 +1,6 @@
 resource "aws_security_group" "discriminat" {
   name_prefix = "discriminat-"
-  description = "firewall rules for the DiscrimiNAT Firewall instances themselves; NOT for clients or apps"
+  description = "firewall rules for DiscrimiNAT instances themselves; NOT for clients or apps"
   lifecycle {
     create_before_destroy = true
   }
@@ -44,7 +44,7 @@ resource "aws_security_group" "discriminat" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "DiscrimiNAT Firewall itself to internet forwarding on behalf of other hosts"
+    description = "DiscrimiNAT itself to the internet forwarding on behalf of other hosts"
   }
 
   tags = local.tags
@@ -82,7 +82,7 @@ resource "aws_launch_template" "discriminat" {
   network_interfaces {
     associate_public_ip_address = false
     delete_on_termination       = true
-    security_groups             = [aws_security_group.discriminat.id]
+    security_groups             = concat([aws_security_group.discriminat.id], var.additional_security_group_ids)
   }
 
   monitoring {
@@ -115,7 +115,7 @@ resource "aws_autoscaling_group" "discriminat" {
     create_before_destroy = true
     precondition {
       condition     = length(data.aws_eips.discriminat.public_ips) >= local.max_possible_instances
-      error_message = "Allocated (and tagged) Elastic IPs (EIPs) must be equal to or greater than maximum possible number of DiscrimiNAT Firewall instances. The EIPs must be tagged with key `discriminat` in lowercase."
+      error_message = "Allocated (and tagged) Elastic IPs (EIPs) must be equal to or greater than maximum possible number of DiscrimiNAT instances. The EIPs must be tagged with key `discriminat` in lowercase."
     }
   }
 
