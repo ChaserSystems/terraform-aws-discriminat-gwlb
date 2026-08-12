@@ -15,7 +15,7 @@ variable "preferences" {
 
 variable "public_subnets" {
   type        = list(string)
-  description = "The IDs of the Public Subnets to deploy the DiscrimiNAT Firewall instances in. These must have routing to the Internet via an Internet Gateway already."
+  description = "The IDs of the Public Subnets to deploy DiscrimiNAT instances in. These must have routing to the Internet via an Internet Gateway already."
 }
 
 variable "private_subnets" {
@@ -25,7 +25,7 @@ variable "private_subnets" {
 
 variable "connection_draining_time" {
   type        = number
-  description = "In seconds, the amount of time to allow for existing flows to end naturally. During an instance-refresh or a scale-in activity, a DiscrimiNAT Firewall instance will not be terminated for at least this long to prevent abrupt interruption of existing flows."
+  description = "In seconds, the amount of time to allow for existing flows to end naturally. During an instance-refresh or scale-in activity, a DiscrimiNAT instance will not be terminated for at least this long to prevent abrupt interruption of existing flows."
   default     = 150
 
   validation {
@@ -42,7 +42,7 @@ variable "tags" {
 
 variable "high_availability_mode" {
   type        = string
-  description = "`cross-zone` or `intra-zone`. In the `cross-zone` mode, the Gateway Load Balancer (GWLB) will distribute traffic evenly across all deployed AZs. This reduces the number of DiscrimiNAT Firewall instances you will have to run for high-availability but increases data-transfer costs. In the `intra-zone` mode, the GWLB will distribute traffic evenly across all DiscrimiNAT Firewall instances in the same AZ as the client. For effective high-availability, this mode will need at least two instances per deployed AZ."
+  description = "`cross-zone` or `intra-zone`. In `cross-zone` mode, the Gateway Load Balancer (GWLB) distributes traffic evenly across all deployed AZs. This reduces the number of DiscrimiNAT instances required but increases data-transfer costs. In `intra-zone` mode, the GWLB distributes traffic evenly across all DiscrimiNAT instances in the same AZ as the client. For effective high-availability, this mode requires at least two instances per deployed AZ."
   default     = "cross-zone"
 
   validation {
@@ -86,6 +86,12 @@ variable "instance_size" {
   }
 }
 
+variable "additional_security_group_ids" {
+  type        = list(string)
+  description = "Optional list of additional Security Group IDs to attach to DiscrimiNAT instances."
+  default     = []
+}
+
 variable "key_pair_name" {
   type        = string
   description = "Strongly suggested to leave this to the default, that is to NOT associate any key-pair with the instances. In case SSH access is desired, provide the name of a valid EC2 Key Pair."
@@ -94,20 +100,20 @@ variable "key_pair_name" {
 
 variable "user_data_base64" {
   type        = string
-  description = "Strongly suggested to NOT run custom startup scripts on DiscrimiNAT Firewall instances. But if you had to, supply a base64 encoded version here."
+  description = "Strongly suggested to NOT run custom startup scripts on DiscrimiNAT instances. But if you had to, supply a base64 encoded version here."
   default     = null
 }
 
 variable "ami_owner" {
   type        = string
-  description = "Reserved for use with Chaser support. Allows overriding the source AMI account for the DiscrimiNAT Firewall instances."
+  description = "Reserved for use with Chaser support. Allows overriding the source AMI account for DiscrimiNAT instances."
   default     = "aws-marketplace"
 }
 
 variable "ami_version" {
   type        = string
-  description = "Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT Firewall instances."
-  default     = "2.40"
+  description = "Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT instances."
+  default     = "2.50"
 }
 
 variable "ami_auto_update" {
@@ -115,7 +121,6 @@ variable "ami_auto_update" {
   description = "Automatically look up and use the latest version of DiscrimiNAT image available from `ami_owner`. When this is set to `true`, `ami_version` is ignored."
   default     = true
 }
-
 
 variable "iam_get_additional_ssm_params" {
   type        = list(string)
