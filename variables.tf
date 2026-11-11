@@ -113,7 +113,7 @@ variable "ami_owner" {
 variable "ami_version" {
   type        = string
   description = "Reserved for use with Chaser support. Allows overriding the source AMI version for DiscrimiNAT instances."
-  default     = "2.50"
+  default     = "2.60"
 }
 
 variable "ami_auto_update" {
